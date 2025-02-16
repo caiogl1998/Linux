@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#tar czf $dest/$archive_file $backup_files
+#Obs: é preciso ter os pacotes zip, tar e ftp instalados!
 
 #Formato da data
 data=$(date +"%d_%m_%Y") # Nesse exemplo a data está no formato dia, mês e ano
@@ -25,10 +25,9 @@ criador_backup(){
     echo "Informe a pasta para salvar o log"
     read -p "Por exemplo /root: " log
     log_backup="$log_location/log-backup-$data.txt"
-
-
+    
     echo
-
+    
     echo "Escolha o tipo de compactação"
     echo "1 - .tar.gz"
     echo "2 - .tar"
@@ -57,7 +56,6 @@ criador_backup(){
         tar -czf $arquivo_backup $pastaBackup >> "$log_backup" 2>&1
     fi
 
-
     #$? é uma variável contém o resultado do comando executado recentemente, que no caso foi o comando tar. Se o comando foi executado com sucesso, ele retornará 0 caso contrário retornará um valor diferente.
     if [ $? -ne 0 ]; then
         echo "Falha ao criar o arquivo de backup." >> "$log_backup" 2>&1
@@ -72,14 +70,10 @@ criador_backup(){
         sleep 3
     fi
 
-    
-
     menu_principal
 }
 
-
-
-# #Função que irá descompactar as pastas
+#Função que irá descompactar as pastas
 restaurar_backup(){
     clear
 
@@ -170,7 +164,6 @@ put $(basename $backup_file)
 bye
 EOF
 
-<<<<<<< HEAD
     # Verifica se o upload foi bem-sucedido"
     if grep -q "226" "$log_ftp"; then
         echo "Upload concluído!" >> "$log_ftp" 2>&1
@@ -178,15 +171,6 @@ EOF
         if [ $excluir = "s" ]; then
             rm -rf $backup_file
             echo "Arquivo local $backup_file foi excluído." >> "$log_ftp" 2>&1
-=======
-    # Verifica se o upload foi bem-sucedido e exclui o backup local em caso de sucesso
-    if grep -q "226" "$log"; then
-        echo "Upload concluído!" >> "$log" 2>&1
-        read -p "Deseja excluir o arquivo local? (s/n): " excluir
-        if [ $excluir = "s" ]; then
-            rm -rf $backup_file
-            echo "Arquivo local $backup_file foi excluído." >> "$log" 2>&1
->>>>>>> 9b34b855f691e038fa697aab9a9d7e5860757209
         fi
         menu_principal
     else
@@ -198,8 +182,6 @@ EOF
     fi
 
 }
-
-
 
 menu_principal(){
     clear
@@ -231,7 +213,6 @@ menu_principal(){
     esac
 }
 
-<<<<<<< HEAD
 configuracoes() {
     clear
     echo "Configurações"
@@ -280,6 +261,3 @@ verificar_pacote(){
 }
 
 menu_principal
-=======
-menu_principal
->>>>>>> 9b34b855f691e038fa697aab9a9d7e5860757209
