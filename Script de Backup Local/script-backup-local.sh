@@ -164,7 +164,7 @@ bye
 EOF
 
     # Verifica se o upload foi bem-sucedido e exclui o backup local em caso de sucesso
-    if grep -q "226" "$$log"; then
+    if grep -q "226" "$log"; then
         echo "Upload concluído!" >> "$$log" 2>&1
         read -p "Deseja excluir o arquivo local? (s/n): " excluir
         if [ $excluir = "s" ]; then
