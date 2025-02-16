@@ -165,11 +165,11 @@ EOF
 
     # Verifica se o upload foi bem-sucedido e exclui o backup local em caso de sucesso
     if grep -q "226" "$log"; then
-        echo "Upload concluído!" >> "$$log" 2>&1
+        echo "Upload concluído!" >> "$log" 2>&1
         read -p "Deseja excluir o arquivo local? (s/n): " excluir
         if [ $excluir = "s" ]; then
             rm -rf $backup_file
-            echo "Arquivo local $backup_file foi excluído." >> "$$log" 2>&1
+            echo "Arquivo local $backup_file foi excluído." >> "$log" 2>&1
         fi
         exit 0
     else
