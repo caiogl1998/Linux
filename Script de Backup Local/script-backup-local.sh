@@ -170,6 +170,7 @@ put $(basename $backup_file)
 bye
 EOF
 
+<<<<<<< HEAD
     # Verifica se o upload foi bem-sucedido"
     if grep -q "226" "$log_ftp"; then
         echo "Upload concluído!" >> "$log_ftp" 2>&1
@@ -177,6 +178,15 @@ EOF
         if [ $excluir = "s" ]; then
             rm -rf $backup_file
             echo "Arquivo local $backup_file foi excluído." >> "$log_ftp" 2>&1
+=======
+    # Verifica se o upload foi bem-sucedido e exclui o backup local em caso de sucesso
+    if grep -q "226" "$log"; then
+        echo "Upload concluído!" >> "$log" 2>&1
+        read -p "Deseja excluir o arquivo local? (s/n): " excluir
+        if [ $excluir = "s" ]; then
+            rm -rf $backup_file
+            echo "Arquivo local $backup_file foi excluído." >> "$log" 2>&1
+>>>>>>> 9b34b855f691e038fa697aab9a9d7e5860757209
         fi
         menu_principal
     else
@@ -221,6 +231,7 @@ menu_principal(){
     esac
 }
 
+<<<<<<< HEAD
 configuracoes() {
     clear
     echo "Configurações"
@@ -269,3 +280,6 @@ verificar_pacote(){
 }
 
 menu_principal
+=======
+menu_principal
+>>>>>>> 9b34b855f691e038fa697aab9a9d7e5860757209
