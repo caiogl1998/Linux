@@ -129,6 +129,56 @@ restaurar_backup(){
 
 }
 
+# Função para enviar o backup para o FTP
+enviar_backup_ftp(){
+
+    echo "Informe o caminho absoluto do arquivo que deseja enviar via FTP."
+    read -p "Por exemplo /root/backup.zip" backup_file
+
+    echo "Informe a pasta para salva o log"
+    read -p "Por exemplo /root: " log
+    log="$log/log-ftp-$data.txt"
+
+    # Verifica se o arquivo local existe antes de enviar;
+    if [ ! -f "$backup_file" ]; then
+        echo "Erro: O arquivo $backup_file não foi encontrado." >> "$log_file" 2>&1
+        exit 1
+    fi
+
+    read -p "Informe o host do FTP: " FTP_HOST
+    read -p "Informe o usuário do FTP: " FTP_USER
+    read -p "Informe a senha do FTP: " FTP_PASS
+    read -p "Informe o diretório do FTP: " FTP_DIR
+
+    echo "Enviando backup para o FTP..." >> "$log_file" 2>&1
+    cd $(dirname $backup_file)
+    # Envio do arquivo via FTP
+    # Devido o uso do EOF a identação ficará justificada a esquerda
+ftp -inv $FTP_HOST <<EOF >> "$log_file" 2>&1
+user $FTP_USER $FTP_PASS
+bin
+cd $FTP_DIR
+put $(basename $backup_file)
+bye
+EOF
+
+    # Verifica se o upload foi bem-sucedido e exclui o backup local em caso de sucesso
+    if grep -q "226" "$log_file"; then
+        echo "Upload concluído!" >> "$log_file" 2>&1
+        read -p "Deseja excluir o arquivo local? (s/n): " excluir
+        if [ $excluir = "s" ]; then
+            rm -rf $backup_file
+            echo "Arquivo local $backup_file foi excluído." >> "$log_file" 2>&1
+        fi
+        exit 0
+    else
+        echo "Falha no Upload! Arquivo de backup em $backup_file" >> "$log_file" 2>&1
+        exit 1
+    fi
+
+}
+
+
 
 menu_principal(){
     clear
@@ -141,6 +191,7 @@ menu_principal(){
     case $opcao in
         1) criador_backup ;;
         2) restaurar_backup ;;
+        3) enviar_backup_ftp ;;
         0) exit ;;
         *) echo "Opção inválida" ;;
     esac
